@@ -1,4 +1,3 @@
-	
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -9,8 +8,8 @@ lr = pickle.load(open('lr1_model_23_apr.pkl', 'rb'))
 dt = pickle.load(open('dt1_model_23_apr.pkl', 'rb'))
 rf = pickle.load(open('rf1_model_23_apr.pkl', 'rb'))
 
-# Load the dataframe
-df = pickle.load(open('df_23_apr.pkl', 'rb'))
+# Load the dataframe (without the target variable 'Price')
+df = pickle.load(open('df_23_apr.pkl', 'rb')).drop(columns=['Price'])
 
 # Streamlit app
 st.title('Laptop Price Prediction')
@@ -32,7 +31,6 @@ if st.button('Predict Price'):
     input_data_encoded = pd.get_dummies(input_data, columns=['Company', 'TypeName', 'Touchscreen'])
     
     # Align the input_data_encoded columns with the training data columns
-    # Assuming df is the dataframe used for training with the final set of columns after encoding
     input_data_encoded = input_data_encoded.reindex(columns=df.columns, fill_value=0)
     
     # Make predictions using the models
@@ -46,4 +44,3 @@ if st.button('Predict Price'):
         st.subheader(f'Random Forest Prediction: ${rf_prediction:.2f}')
     except ValueError as e:
         st.error(f"Error in prediction: {e}")
-
